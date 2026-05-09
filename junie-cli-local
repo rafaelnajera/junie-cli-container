@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Define the file name
+API_KEY_FILE=".junie-api-key"
+
+# Check in the current directory
+if [ -f "./$API_KEY_FILE" ]; then
+    JUNIE_API_KEY=$(cat "./$API_KEY_FILE")
+# Check in the home directory
+elif [ -f "$HOME/$API_KEY_FILE" ]; then
+    JUNIE_API_KEY=$(cat "$HOME/$API_KEY_FILE")
+fi
+
+# If JUNIE_API_KEY is still empty, print instruction and exit
+if [ -z "$JUNIE_API_KEY" ]; then
+    echo "Error: .junie-api-key file not found."
+    echo "Please create a file named '.junie-api-key' in your current directory or home directory and put your JUNIE_API_KEY inside it."
+    exit 1
+fi
+
+# Run the docker container
+docker run --rm -it -v "$(pwd):/code" -w /code -e JUNIE_API_KEY="$JUNIE_API_KEY" junie-cli-local

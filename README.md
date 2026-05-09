@@ -11,11 +11,30 @@ docker compose build
 
 # Usage
 
-Once the container is built, in your local machine you can run a Junie CLI interactive session on a subdirectory
-of your root path with
+Once the container is built, you can use the provided script to run Junie from any directory:
+
+1.  **Add the script to your PATH** (optional but recommended):
+    ```bash
+    ln -s $(pwd)/junie-cli-local /usr/local/bin/junie
+    ```
+
+2.  **Create an API key file**:
+    Create a file named `.junie-api-key` in your home directory (`~/.junie-api-key`) or current directory and paste your API key there.
+
+3.  **Run Junie**:
+    ```bash
+    junie-cli-local
+    ```
+    (or just `junie` if you created the symlink)
+
+The script automatically mounts your current directory to `/code` inside the container.
+
+## Manual Usage
+
+Alternatively, you can run a Junie CLI interactive session on a subdirectory with:
 
  ```bash
-docker compose run --rm -w /code/subdir junie
+docker run --rm -it -w /code/subdir junie-cli-local
 ```
 
 **Authentication**:
@@ -23,7 +42,7 @@ docker compose run --rm -w /code/subdir junie
 - **Using API Key**: If you have a `JUNIE_API_KEY`, you can pass it directly:
 
 ```bash
-JUNIE_API_KEY=your_key_here docker compose run --rm -w /code/subdir junie
+docker run --rm -it -w /code/subdir -e JUNIE_API_KEY=$JUNIE_API_KEY junie-cli-local
 ```
 
 - **Browser Login**: If you run it without a key, Junie will provide a login link. Since the container is running in
