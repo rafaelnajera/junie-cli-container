@@ -1,0 +1,11 @@
+services:
+  junie:
+    build: .
+    image: junie-cli-local
+    platform: linux/amd64
+    volumes:
+      - ${CODE_ROOT}:/code
+    environment:
+      - JUNIE_API_KEY=${JUNIE_API_KEY:-}
+    stdin_open: true
+    tty: true
